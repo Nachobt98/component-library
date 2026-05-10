@@ -9,33 +9,64 @@ function cx(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function OptionGroup({ label, value, options, onChange }) {
+function OptionGroup({ label, value, options, onChange, optional = false }) {
   return (
     <div>
-      <p className="mb-2 text-xs uppercase tracking-[0.2em] text-white/35">{label}</p>
-      <div className="flex flex-wrap gap-2">
-        {options.map((option) => (
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <p className="text-xs uppercase tracking-[0.2em] text-white/35">{label}</p>
+        {optional && value ? (
           <button
-            key={option}
-            className={cx(
-              'rounded-xl px-3 py-2 text-xs capitalize transition',
-              value === option ? 'bg-white text-slate-950' : 'bg-white/8 text-white/60 hover:bg-white/12',
-            )}
-            onClick={() => onChange(option)}
+            className="rounded-full px-2 py-1 text-[11px] text-white/35 transition hover:bg-white/8 hover:text-white/65"
+            onClick={() => onChange(undefined)}
             type="button"
           >
-            {option}
+            Clear
           </button>
-        ))}
+        ) : null}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {options.map((option) => {
+          const isSelected = value === option
+
+          return (
+            <button
+              key={option}
+              className={cx(
+                'rounded-xl px-3 py-2 text-xs capitalize transition',
+                isSelected ? 'bg-white text-slate-950' : 'bg-white/8 text-white/60 hover:bg-white/12',
+              )}
+              onClick={() => onChange(optional && isSelected ? undefined : option)}
+              type="button"
+            >
+              {option}
+            </button>
+          )
+        })}
       </div>
     </div>
   )
 }
 
+function buildCode(controls) {
+  const props = []
+
+  if (controls.variant) props.push(`variant="${controls.variant}"`)
+  if (controls.size) props.push(`size="${controls.size}"`)
+  if (controls.radius) props.push(`radius="${controls.radius}"`)
+  if (controls.glow) props.push('glow')
+  if (controls.loading) props.push('loading')
+  if (controls.disabled) props.push('disabled')
+  if (controls.fullWidth) props.push('fullWidth')
+
+  const propsText = props.length ? ` ${props.join(' ')}` : ''
+  const label = controls.loading ? 'Guardando' : 'Guardar cambios'
+
+  return `<Button${propsText}>\n  ${label}\n</Button>`
+}
+
 export function ButtonPlayground({ palette, controls, onControlsChange, onBack }) {
   const update = (partial) => onControlsChange({ ...controls, ...partial })
-
-  const code = `<Button variant="${controls.variant}" size="${controls.size}" radius="${controls.radius}"${controls.loading ? ' loading' : ''}${controls.disabled ? ' disabled' : ''}${controls.fullWidth ? ' fullWidth' : ''}>\n  ${controls.loading ? 'Guardando' : 'Guardar cambios'}\n</Button>`
+  const code = buildCode(controls)
 
   return (
     <section className="space-y-6">
@@ -55,7 +86,7 @@ export function ButtonPlayground({ palette, controls, onControlsChange, onBack }
             </div>
             <h2 className="text-3xl font-semibold tracking-tight text-white">Button</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-white/55">
-              Componente de acción con variantes cerradas, tamaños, radio, estado loading, disabled, full width e icon slots.
+              Componente de acción con variantes cerradas, tamaños, radio, glow opcional, estado loading, disabled, full width e icon slots.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -79,6 +110,7 @@ export function ButtonPlayground({ palette, controls, onControlsChange, onBack }
             <Button
               disabled={controls.disabled}
               fullWidth={controls.fullWidth}
+              glow={controls.glow}
               leftIcon={controls.withLeftIcon ? <Save className="h-4 w-4" /> : undefined}
               loading={controls.loading}
               palette={palette}
@@ -120,6 +152,7 @@ export function ButtonPlayground({ palette, controls, onControlsChange, onBack }
                 <Button leftIcon={<Save className="h-4 w-4" />} palette={palette} variant="primary">Con icono</Button>
                 <Button loading palette={palette} variant="primary">Loading</Button>
                 <Button disabled palette={palette} variant="primary">Disabled</Button>
+                <Button glow palette={palette} radius="lg" variant="primary">Glow</Button>
               </div>
             </div>
           </div>
@@ -129,11 +162,12 @@ export function ButtonPlayground({ palette, controls, onControlsChange, onBack }
           <div className="rounded-3xl border border-white/10 bg-white/[0.055] p-5 backdrop-blur-xl">
             <h3 className="mb-4 text-base font-semibold text-white">Controles</h3>
             <div className="space-y-5">
-              <OptionGroup label="Variant" onChange={(variant) => update({ variant })} options={variants} value={controls.variant} />
-              <OptionGroup label="Size" onChange={(size) => update({ size })} options={sizes} value={controls.size} />
-              <OptionGroup label="Radius" onChange={(radius) => update({ radius })} options={radii} value={controls.radius} />
+              <OptionGroup label="Variant" onChange={(variant) => update({ variant })} options={variants} optional value={controls.variant} />
+              <OptionGroup label="Size" onChange={(size) => update({ size })} options={sizes} optional value={controls.size} />
+              <OptionGroup label="Radius" onChange={(radius) => update({ radius })} options={radii} optional value={controls.radius} />
               <div className="space-y-2">
                 {[
+                  ['glow', 'Glow'],
                   ['loading', 'Loading'],
                   ['disabled', 'Disabled'],
                   ['fullWidth', 'Full width'],
@@ -142,7 +176,7 @@ export function ButtonPlayground({ palette, controls, onControlsChange, onBack }
                 ].map(([key, label]) => (
                   <label key={key} className="flex cursor-pointer items-center justify-between rounded-2xl border border-white/8 bg-white/[0.035] px-3 py-2 text-sm text-white/65">
                     {label}
-                    <input checked={controls[key]} onChange={(event) => update({ [key]: event.target.checked })} type="checkbox" />
+                    <input checked={Boolean(controls[key])} onChange={(event) => update({ [key]: event.target.checked })} type="checkbox" />
                   </label>
                 ))}
               </div>
