@@ -18,16 +18,16 @@ function cx(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function getVariantStyles(variant, palette) {
+function getVariantStyles(variant, palette, glow) {
   const primary = palette?.primary ?? '#F9736B'
   const secondary = palette?.secondary ?? '#8B5CF6'
 
   const styles = {
     primary: {
-      className: 'border-transparent text-white shadow-lg hover:-translate-y-0.5 active:translate-y-0 disabled:hover:translate-y-0',
+      className: 'border-transparent text-white hover:-translate-y-0.5 active:translate-y-0 disabled:hover:translate-y-0',
       style: {
         background: primary,
-        boxShadow: `0 18px 40px ${primary}35`,
+        boxShadow: glow ? `0 18px 40px ${primary}35` : undefined,
       },
     },
     secondary: {
@@ -66,7 +66,8 @@ export function Button({
   children,
   variant = 'primary',
   size = 'md',
-  radius = 'lg',
+  radius,
+  glow = false,
   loading = false,
   disabled = false,
   fullWidth = false,
@@ -77,7 +78,7 @@ export function Button({
   type = 'button',
   ...props
 }) {
-  const variantStyles = getVariantStyles(variant, palette)
+  const variantStyles = getVariantStyles(variant, palette, glow)
   const isDisabled = disabled || loading
 
   return (
