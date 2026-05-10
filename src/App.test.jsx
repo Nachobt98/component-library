@@ -57,7 +57,7 @@ describe('App dashboard', () => {
 
     expect(screen.getByRole('heading', { name: 'Button' })).toBeInTheDocument()
     expect(screen.getByText(/Preview interactiva/i)).toBeInTheDocument()
-    expect(screen.getByText(/Variant/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Volver al mapa/i })).toBeInTheDocument()
   })
 
   it('updates Button playground controls', async () => {
@@ -66,7 +66,9 @@ describe('App dashboard', () => {
 
     await user.click(screen.getByRole('button', { name: 'All' }))
     await user.click(screen.getByRole('button', { name: 'View Button' }))
-    await user.click(screen.getByRole('button', { name: 'danger' }))
+
+    const dangerButtons = screen.getAllByRole('button', { name: 'danger' })
+    await user.click(dangerButtons[dangerButtons.length - 1])
     await user.click(screen.getByLabelText('Loading'))
 
     expect(screen.getByText(/variant="danger"/i)).toBeInTheDocument()
