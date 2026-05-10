@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   BadgeCheck,
@@ -21,6 +21,8 @@ import {
   Wand2,
   Zap,
 } from 'lucide-react'
+import { Button } from './components/ui/Button'
+import { ButtonPlayground } from './components/playgrounds/ButtonPlayground'
 
 const palettes = {
   nocturne: {
@@ -62,23 +64,62 @@ const palettes = {
     soft: '#F5F3FF',
     dark: '#1E1B4B',
   },
+  arctic: {
+    name: 'Arctic Blue',
+    mood: 'Técnica, limpia y muy SaaS',
+    bg: 'from-slate-950 via-blue-950 to-cyan-950',
+    surface: 'bg-blue-50/8',
+    panel: 'bg-blue-50/[0.075]',
+    border: 'border-blue-100/12',
+    primary: '#3B82F6',
+    secondary: '#06B6D4',
+    accent: '#A3E635',
+    soft: '#EFF6FF',
+    dark: '#0F172A',
+  },
+  graphite: {
+    name: 'Graphite Amber',
+    mood: 'Sobria, cálida y profesional',
+    bg: 'from-zinc-950 via-stone-950 to-amber-950',
+    surface: 'bg-amber-50/8',
+    panel: 'bg-amber-50/[0.075]',
+    border: 'border-amber-100/12',
+    primary: '#F59E0B',
+    secondary: '#64748B',
+    accent: '#22C55E',
+    soft: '#FFFBEB',
+    dark: '#18181B',
+  },
+  rosewood: {
+    name: 'Rosewood Mint',
+    mood: 'Visual, atrevida y memorable',
+    bg: 'from-stone-950 via-rose-950 to-teal-950',
+    surface: 'bg-rose-50/8',
+    panel: 'bg-rose-50/[0.075]',
+    border: 'border-rose-100/12',
+    primary: '#E11D48',
+    secondary: '#14B8A6',
+    accent: '#FACC15',
+    soft: '#FFF1F2',
+    dark: '#1C1917',
+  },
 }
 
 const groups = ['Core', 'Forms', 'Data', 'Navigation', 'Feedback', 'Special']
 
 const components = [
-  { name: 'Button', group: 'Core', impact: 94, complexity: 'Baja', badge: 'base', desc: 'Variants: solid, outline, ghost, soft, danger. Tamaños y radios configurables.' },
-  { name: 'Input Field', group: 'Forms', impact: 90, complexity: 'Media', badge: 'a11y', desc: 'Label persistente, helper text, error state, icon slots y validación visual.' },
-  { name: 'Select / Combobox', group: 'Forms', impact: 88, complexity: 'Alta', badge: 'headless', desc: 'Búsqueda, grupos, empty state, keyboard nav y tokens de altura.' },
-  { name: 'Alert / Toast', group: 'Feedback', impact: 82, complexity: 'Media', badge: 'motion', desc: 'Stack animado con success, info, warning y danger.' },
-  { name: 'Card', group: 'Core', impact: 91, complexity: 'Baja', badge: 'layout', desc: 'Media, header, metadata, actions, hover y densidad configurable.' },
-  { name: 'Table Pro', group: 'Data', impact: 89, complexity: 'Alta', badge: 'data', desc: 'Sorting, density, sticky actions, empty state y skeleton loading.' },
-  { name: 'Tabs', group: 'Navigation', impact: 78, complexity: 'Media', badge: 'nav', desc: 'Underline, pill, segmented, icon tabs y orientación vertical.' },
-  { name: 'Command Palette', group: 'Special', impact: 87, complexity: 'Alta', badge: 'wow', desc: 'Buscador global estilo IDE: acciones, atajos, grupos y navegación rápida.' },
-  { name: 'Stat Orb', group: 'Special', impact: 74, complexity: 'Media', badge: 'visual', desc: 'Indicador circular con gradiente, progreso, delta y estado semántico.' },
-  { name: 'Bento Feature Grid', group: 'Special', impact: 86, complexity: 'Media', badge: 'bento', desc: 'Grid editorial para landing/docs: bloques asimétricos pero alineados.' },
-  { name: 'Timeline Rail', group: 'Data', impact: 79, complexity: 'Media', badge: 'story', desc: 'Historial de eventos con estado, autor, fecha y acciones contextuales.' },
-  { name: 'Color Harmony Studio', group: 'Special', impact: 92, complexity: 'Alta', badge: 'unique', desc: 'Componente para visualizar tokens, contraste, roles y combinaciones cromáticas.' },
+  { id: 'button', name: 'Button', group: 'Core', impact: 94, complexity: 'Baja', badge: 'base', desc: 'Variants: primary, secondary, outline, ghost, soft, danger y link. Tamaños, radios y estados configurables.', ready: true },
+  { id: 'input', name: 'Input Field', group: 'Forms', impact: 90, complexity: 'Media', badge: 'a11y', desc: 'Label persistente, helper text, error state, icon slots y validación visual.' },
+  { id: 'select', name: 'Select / Combobox', group: 'Forms', impact: 88, complexity: 'Alta', badge: 'headless', desc: 'Búsqueda, grupos, empty state, keyboard nav y tokens de altura.' },
+  { id: 'alert-toast', name: 'Alert / Toast', group: 'Feedback', impact: 82, complexity: 'Media', badge: 'motion', desc: 'Stack animado con success, info, warning y danger.' },
+  { id: 'card', name: 'Card', group: 'Core', impact: 91, complexity: 'Baja', badge: 'layout', desc: 'Media, header, metadata, actions, hover y densidad configurable.' },
+  { id: 'table', name: 'Table Pro', group: 'Data', impact: 89, complexity: 'Alta', badge: 'data', desc: 'Sorting, density, sticky actions, empty state y skeleton loading.' },
+  { id: 'tabs', name: 'Tabs', group: 'Navigation', impact: 78, complexity: 'Media', badge: 'nav', desc: 'Underline, pill, segmented, icon tabs y orientación vertical.' },
+  { id: 'command-palette', name: 'Command Palette', group: 'Special', impact: 87, complexity: 'Alta', badge: 'wow', desc: 'Buscador global estilo IDE: acciones, atajos, grupos y navegación rápida.' },
+  { id: 'stat-orb', name: 'Stat Orb', group: 'Special', impact: 74, complexity: 'Media', badge: 'visual', desc: 'Indicador circular con gradiente, progreso, delta y estado semántico.' },
+  { id: 'bento', name: 'Bento Feature Grid', group: 'Special', impact: 86, complexity: 'Media', badge: 'bento', desc: 'Grid editorial para landing/docs: bloques asimétricos pero alineados.' },
+  { id: 'timeline', name: 'Timeline Rail', group: 'Data', impact: 79, complexity: 'Media', badge: 'story', desc: 'Historial de eventos con estado, autor, fecha y acciones contextuales.' },
+  { id: 'color-studio', name: 'Color Harmony Studio', group: 'Special', impact: 92, complexity: 'Alta', badge: 'unique', desc: 'Componente para visualizar tokens, contraste, roles y combinaciones cromáticas.' },
 ]
 
 const tokens = [
@@ -101,6 +142,17 @@ const badgeStyles = {
   bento: 'bg-orange-400/15 text-orange-200',
   story: 'bg-lime-400/15 text-lime-200',
   unique: 'bg-violet-400/15 text-violet-200',
+}
+
+const initialButtonControls = {
+  variant: 'primary',
+  size: 'md',
+  radius: 'lg',
+  loading: false,
+  disabled: false,
+  fullWidth: false,
+  withLeftIcon: false,
+  withRightIcon: false,
 }
 
 function hexToRgb(hex) {
@@ -170,15 +222,16 @@ function ComponentPreview({ palette, density, radius }) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-white">Button variants</p>
-                <p className="text-xs text-white/45">Primary, secondary, ghost, danger</p>
+                <p className="text-xs text-white/45">Primary, secondary, outline, ghost, soft, danger, link</p>
               </div>
               <BadgeCheck className="h-5 w-5" style={{ color: palette.accent }} />
             </div>
             <div className="mt-5 flex flex-wrap gap-3">
-              <button className={cx('px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5', round)} style={{ background: palette.primary, boxShadow: `0 18px 40px ${palette.primary}40` }}>Primary</button>
-              <button className={cx('border border-white/15 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/15', round)}>Secondary</button>
-              <button className={cx('px-5 py-2.5 text-sm font-semibold text-white/75 transition hover:bg-white/10', round)}>Ghost</button>
-              <button className={cx('bg-rose-500/15 px-5 py-2.5 text-sm font-semibold text-rose-200 ring-1 ring-rose-400/20', round)}>Danger</button>
+              <Button palette={palette} radius={radius === 'pill' ? 'full' : 'lg'} variant="primary">Primary</Button>
+              <Button palette={palette} radius={radius === 'pill' ? 'full' : 'lg'} variant="secondary">Secondary</Button>
+              <Button palette={palette} radius={radius === 'pill' ? 'full' : 'lg'} variant="soft">Soft</Button>
+              <Button palette={palette} radius={radius === 'pill' ? 'full' : 'lg'} variant="ghost">Ghost</Button>
+              <Button palette={palette} radius={radius === 'pill' ? 'full' : 'lg'} variant="danger">Danger</Button>
             </div>
           </motion.div>
 
@@ -212,9 +265,10 @@ function ComponentPreview({ palette, density, radius }) {
             </div>
             <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">AA check</span>
           </div>
-          <div className="grid gap-3 md:grid-cols-3">
+          <div className="grid gap-3 md:grid-cols-4">
             {[
               ['Primary / Dark', palette.primary, palette.dark],
+              ['Secondary / Dark', palette.secondary, palette.dark],
               ['Accent / Dark', palette.accent, palette.dark],
               ['Soft / Dark', palette.soft, palette.dark],
             ].map(([label, fg, bg]) => (
@@ -230,12 +284,59 @@ function ComponentPreview({ palette, density, radius }) {
   )
 }
 
+function ComponentMap({ activeGroup, filtered, onOpenComponent, palette, query, setActiveGroup, setQuery }) {
+  return (
+    <div className={cx('rounded-3xl border p-4 backdrop-blur-xl', palette.border, palette.surface)}>
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h2 className="text-xl font-semibold tracking-tight text-white">Mapa de componentes propuestos</h2>
+          <p className="mt-1 text-sm text-white/48">La gracia está en que todo sea bonito, sí, pero sobre todo componible.</p>
+        </div>
+        <div className="relative min-w-[260px]">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar componente..." className="w-full rounded-2xl border border-white/10 bg-white/[0.055] py-3 pl-10 pr-4 text-sm text-white outline-none placeholder:text-white/30 focus:border-white/25" />
+        </div>
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {['All', ...groups].map((group) => (
+          <button key={group} onClick={() => setActiveGroup(group)} className={cx('rounded-full px-4 py-2 text-sm transition', activeGroup === group ? 'text-slate-950' : 'bg-white/8 text-white/60 hover:bg-white/12')} style={activeGroup === group ? { background: palette.soft } : undefined}>{group}</button>
+        ))}
+      </div>
+
+      <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <AnimatePresence mode="popLayout">
+          {filtered.map((item) => (
+            <motion.article layout key={item.id} initial={{ opacity: 0, scale: 0.96, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.96, y: -8 }} transition={{ duration: 0.18 }} className="group rounded-3xl border border-white/10 bg-white/[0.045] p-4 transition hover:-translate-y-1 hover:bg-white/[0.075]">
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <div className="grid h-11 w-11 place-items-center rounded-2xl" style={{ background: `${palette.primary}20`, color: palette.primary }}>
+                  {item.group === 'Special' ? <Sparkles className="h-5 w-5" /> : item.group === 'Data' ? <Gauge className="h-5 w-5" /> : <Boxes className="h-5 w-5" />}
+                </div>
+                <span className={cx('rounded-full px-2.5 py-1 text-[11px] font-medium', badgeStyles[item.badge])}>{item.badge}</span>
+              </div>
+              <h3 className="text-base font-semibold text-white">{item.name}</h3>
+              <p className="mt-2 min-h-[60px] text-sm leading-5 text-white/50">{item.desc}</p>
+              <div className="mt-4 flex items-center justify-between border-t border-white/8 pt-4">
+                <div><p className="text-[11px] uppercase tracking-[0.18em] text-white/30">Impact</p><p className="text-sm font-semibold text-white">{item.impact}/100</p></div>
+                <div><p className="text-[11px] uppercase tracking-[0.18em] text-white/30">Complexity</p><p className="text-sm font-semibold text-white">{item.complexity}</p></div>
+                <button className="grid h-9 w-9 place-items-center rounded-full bg-white/8 text-white/55 transition group-hover:bg-white group-hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-40" aria-label={`View ${item.name}`} disabled={!item.ready} onClick={() => item.ready && onOpenComponent(item.id)} type="button"><ChevronRight className="h-4 w-4" /></button>
+              </div>
+            </motion.article>
+          ))}
+        </AnimatePresence>
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
   const [paletteKey, setPaletteKey] = useState('nocturne')
   const [activeGroup, setActiveGroup] = useState('Special')
   const [density, setDensity] = useState('cozy')
   const [radius, setRadius] = useState('soft')
   const [query, setQuery] = useState('')
+  const [selectedComponent, setSelectedComponent] = useState(null)
+  const [buttonControls, setButtonControls] = useState(initialButtonControls)
 
   const palette = palettes[paletteKey]
   const filtered = useMemo(() => {
@@ -348,94 +449,60 @@ export default function App() {
               <PaletteSwatch color={palette.accent} label="Accent" />
             </div>
 
-            <ComponentPreview palette={palette} density={density} radius={radius} />
+            {selectedComponent === 'button' ? (
+              <ButtonPlayground controls={buttonControls} onBack={() => setSelectedComponent(null)} onControlsChange={setButtonControls} palette={palette} />
+            ) : (
+              <>
+                <ComponentPreview palette={palette} density={density} radius={radius} />
+                <ComponentMap activeGroup={activeGroup} filtered={filtered} onOpenComponent={setSelectedComponent} palette={palette} query={query} setActiveGroup={setActiveGroup} setQuery={setQuery} />
 
-            <div className={cx('rounded-3xl border p-4 backdrop-blur-xl', palette.border, palette.surface)}>
-              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold tracking-tight text-white">Mapa de componentes propuestos</h2>
-                  <p className="mt-1 text-sm text-white/48">La gracia está en que todo sea bonito, sí, pero sobre todo componible.</p>
-                </div>
-                <div className="relative min-w-[260px]">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
-                  <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar componente..." className="w-full rounded-2xl border border-white/10 bg-white/[0.055] py-3 pl-10 pr-4 text-sm text-white outline-none placeholder:text-white/30 focus:border-white/25" />
-                </div>
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                {['All', ...groups].map((group) => (
-                  <button key={group} onClick={() => setActiveGroup(group)} className={cx('rounded-full px-4 py-2 text-sm transition', activeGroup === group ? 'text-slate-950' : 'bg-white/8 text-white/60 hover:bg-white/12')} style={activeGroup === group ? { background: palette.soft } : undefined}>{group}</button>
-                ))}
-              </div>
-
-              <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-                <AnimatePresence mode="popLayout">
-                  {filtered.map((item) => (
-                    <motion.article layout key={item.name} initial={{ opacity: 0, scale: 0.96, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.96, y: -8 }} transition={{ duration: 0.18 }} className="group rounded-3xl border border-white/10 bg-white/[0.045] p-4 transition hover:-translate-y-1 hover:bg-white/[0.075]">
-                      <div className="mb-4 flex items-start justify-between gap-3">
-                        <div className="grid h-11 w-11 place-items-center rounded-2xl" style={{ background: `${palette.primary}20`, color: palette.primary }}>
-                          {item.group === 'Special' ? <Sparkles className="h-5 w-5" /> : item.group === 'Data' ? <Gauge className="h-5 w-5" /> : <Boxes className="h-5 w-5" />}
+                <div className="grid gap-4 lg:grid-cols-[1fr_0.85fr]">
+                  <div className={cx('rounded-3xl border p-5 backdrop-blur-xl', palette.border, palette.surface)}>
+                    <div className="mb-5 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-xl font-semibold text-white">Roadmap visual inicial</h2>
+                        <p className="mt-1 text-sm text-white/45">Orden lógico para no construir un castillo precioso sobre CSS de plastilina.</p>
+                      </div>
+                      <Play className="h-5 w-5" style={{ color: palette.accent }} />
+                    </div>
+                    <div className="space-y-4">
+                      {[
+                        ['01', 'Design tokens', 'Color roles, spacing, radius, typography, shadow, motion.'],
+                        ['02', 'Foundations', 'Button, Input, Label, Textarea, Checkbox, Radio, Switch, Badge.'],
+                        ['03', 'Composed UI', 'Card, Modal, Drawer, Table, Tabs, Toast, Tooltip, Dropdown.'],
+                        ['04', 'Signature components', 'Command Palette, Color Harmony Studio, Stat Orb, Bento Grid.'],
+                      ].map(([step, title, desc]) => (
+                        <div key={step} className="flex gap-4 rounded-2xl border border-white/8 bg-white/[0.035] p-4">
+                          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl font-mono text-sm" style={{ background: `${palette.primary}24`, color: palette.primary }}>{step}</div>
+                          <div><p className="font-medium text-white">{title}</p><p className="mt-1 text-sm text-white/45">{desc}</p></div>
                         </div>
-                        <span className={cx('rounded-full px-2.5 py-1 text-[11px] font-medium', badgeStyles[item.badge])}>{item.badge}</span>
-                      </div>
-                      <h3 className="text-base font-semibold text-white">{item.name}</h3>
-                      <p className="mt-2 min-h-[60px] text-sm leading-5 text-white/50">{item.desc}</p>
-                      <div className="mt-4 flex items-center justify-between border-t border-white/8 pt-4">
-                        <div><p className="text-[11px] uppercase tracking-[0.18em] text-white/30">Impact</p><p className="text-sm font-semibold text-white">{item.impact}/100</p></div>
-                        <div><p className="text-[11px] uppercase tracking-[0.18em] text-white/30">Complexity</p><p className="text-sm font-semibold text-white">{item.complexity}</p></div>
-                        <button className="grid h-9 w-9 place-items-center rounded-full bg-white/8 text-white/55 transition group-hover:bg-white group-hover:text-slate-950" aria-label={`View ${item.name}`}><ChevronRight className="h-4 w-4" /></button>
-                      </div>
-                    </motion.article>
-                  ))}
-                </AnimatePresence>
-              </div>
-            </div>
-
-            <div className="grid gap-4 lg:grid-cols-[1fr_0.85fr]">
-              <div className={cx('rounded-3xl border p-5 backdrop-blur-xl', palette.border, palette.surface)}>
-                <div className="mb-5 flex items-center justify-between">
-                  <div>
-                    <h2 className="text-xl font-semibold text-white">Roadmap visual inicial</h2>
-                    <p className="mt-1 text-sm text-white/45">Orden lógico para no construir un castillo precioso sobre CSS de plastilina.</p>
+                      ))}
+                    </div>
                   </div>
-                  <Play className="h-5 w-5" style={{ color: palette.accent }} />
-                </div>
-                <div className="space-y-4">
-                  {[
-                    ['01', 'Design tokens', 'Color roles, spacing, radius, typography, shadow, motion.'],
-                    ['02', 'Foundations', 'Button, Input, Label, Textarea, Checkbox, Radio, Switch, Badge.'],
-                    ['03', 'Composed UI', 'Card, Modal, Drawer, Table, Tabs, Toast, Tooltip, Dropdown.'],
-                    ['04', 'Signature components', 'Command Palette, Color Harmony Studio, Stat Orb, Bento Grid.'],
-                  ].map(([step, title, desc]) => (
-                    <div key={step} className="flex gap-4 rounded-2xl border border-white/8 bg-white/[0.035] p-4">
-                      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl font-mono text-sm" style={{ background: `${palette.primary}24`, color: palette.primary }}>{step}</div>
-                      <div><p className="font-medium text-white">{title}</p><p className="mt-1 text-sm text-white/45">{desc}</p></div>
-                    </div>
-                  ))}
-                </div>
-              </div>
 
-              <div className={cx('rounded-3xl border p-5 backdrop-blur-xl', palette.border, palette.surface)}>
-                <div className="mb-5 flex items-center gap-2">
-                  <Eye className="h-5 w-5" style={{ color: palette.primary }} />
-                  <h2 className="text-xl font-semibold text-white">Principios de esta estética</h2>
-                </div>
-                <div className="space-y-3">
-                  {[
-                    'Mucho neutro, poco acento: el color guía, no grita.',
-                    'Gradientes contenidos: profundidad sí, feria de pueblo no.',
-                    'Estados visibles: hover, focus, disabled, loading y error desde el día uno.',
-                    'Componentes raros, pero útiles: diferenciación con propósito.',
-                    'Customización por tokens y variantes, no por sobrescribir clases a martillazos.',
-                  ].map((item) => (
-                    <div key={item} className="flex gap-3 rounded-2xl bg-white/[0.035] p-3 text-sm text-white/58">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: palette.accent }} />
-                      <span>{item}</span>
+                  <div className={cx('rounded-3xl border p-5 backdrop-blur-xl', palette.border, palette.surface)}>
+                    <div className="mb-5 flex items-center gap-2">
+                      <Eye className="h-5 w-5" style={{ color: palette.primary }} />
+                      <h2 className="text-xl font-semibold text-white">Principios de esta estética</h2>
                     </div>
-                  ))}
+                    <div className="space-y-3">
+                      {[
+                        'Mucho neutro, poco acento: el color guía, no grita.',
+                        'Gradientes contenidos: profundidad sí, feria de pueblo no.',
+                        'Estados visibles: hover, focus, disabled, loading y error desde el día uno.',
+                        'Componentes raros, pero útiles: diferenciación con propósito.',
+                        'Customización por tokens y variantes, no por sobrescribir clases a martillazos.',
+                      ].map((item) => (
+                        <div key={item} className="flex gap-3 rounded-2xl bg-white/[0.035] p-3 text-sm text-white/58">
+                          <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: palette.accent }} />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
           </section>
         </div>
       </section>
