@@ -48,20 +48,17 @@ function OptionGroup({ label, value, options, onChange, optional = false }) {
 }
 
 function buildCode(controls) {
-  const props = []
+  const props = [`variant="${controls.variant}"`, `size="${controls.size}"`]
 
-  if (controls.variant) props.push(`variant="${controls.variant}"`)
-  if (controls.size) props.push(`size="${controls.size}"`)
   if (controls.radius) props.push(`radius="${controls.radius}"`)
   if (controls.glow) props.push('glow')
   if (controls.loading) props.push('loading')
   if (controls.disabled) props.push('disabled')
   if (controls.fullWidth) props.push('fullWidth')
 
-  const propsText = props.length ? ` ${props.join(' ')}` : ''
   const label = controls.loading ? 'Guardando' : 'Guardar cambios'
 
-  return `<Button${propsText}>\n  ${label}\n</Button>`
+  return `<Button ${props.join(' ')}>\n  ${label}\n</Button>`
 }
 
 export function ButtonPlayground({ palette, controls, onControlsChange, onBack }) {
@@ -86,7 +83,7 @@ export function ButtonPlayground({ palette, controls, onControlsChange, onBack }
             </div>
             <h2 className="text-3xl font-semibold tracking-tight text-white">Button</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-white/55">
-              Componente de acción con variantes cerradas, tamaños, radio, glow opcional, estado loading, disabled, full width e icon slots.
+              Componente de acción con variante y tamaño obligatorios; radio, glow, loading, disabled, full width e icon slots opcionales.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -162,8 +159,8 @@ export function ButtonPlayground({ palette, controls, onControlsChange, onBack }
           <div className="rounded-3xl border border-white/10 bg-white/[0.055] p-5 backdrop-blur-xl">
             <h3 className="mb-4 text-base font-semibold text-white">Controles</h3>
             <div className="space-y-5">
-              <OptionGroup label="Variant" onChange={(variant) => update({ variant })} options={variants} optional value={controls.variant} />
-              <OptionGroup label="Size" onChange={(size) => update({ size })} options={sizes} optional value={controls.size} />
+              <OptionGroup label="Variant" onChange={(variant) => update({ variant })} options={variants} value={controls.variant} />
+              <OptionGroup label="Size" onChange={(size) => update({ size })} options={sizes} value={controls.size} />
               <OptionGroup label="Radius" onChange={(radius) => update({ radius })} options={radii} optional value={controls.radius} />
               <div className="space-y-2">
                 {[
