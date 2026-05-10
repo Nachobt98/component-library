@@ -38,4 +38,38 @@ describe('App dashboard', () => {
 
     expect(screen.getByText('#10B981')).toBeInTheDocument()
   })
+
+  it('shows the new Arctic Blue palette', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: /Arctic Blue/i }))
+
+    expect(screen.getByText('#3B82F6')).toBeInTheDocument()
+  })
+
+  it('opens the Button playground from the component map', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: 'All' }))
+    await user.click(screen.getByRole('button', { name: 'View Button' }))
+
+    expect(screen.getByRole('heading', { name: 'Button' })).toBeInTheDocument()
+    expect(screen.getByText(/Preview interactiva/i)).toBeInTheDocument()
+    expect(screen.getByText(/Variant/i)).toBeInTheDocument()
+  })
+
+  it('updates Button playground controls', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: 'All' }))
+    await user.click(screen.getByRole('button', { name: 'View Button' }))
+    await user.click(screen.getByRole('button', { name: 'danger' }))
+    await user.click(screen.getByLabelText('Loading'))
+
+    expect(screen.getByText(/variant="danger"/i)).toBeInTheDocument()
+    expect(screen.getByText(/loading/i)).toBeInTheDocument()
+  })
 })
