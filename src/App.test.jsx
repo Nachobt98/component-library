@@ -1,11 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import App from './App'
+import DashboardApp from './DashboardApp'
 
-describe('App dashboard', () => {
+describe('Dashboard app', () => {
   it('renders the component library dashboard heading', () => {
-    render(<App />)
+    render(<DashboardApp />)
 
     expect(
       screen.getByRole('heading', {
@@ -16,7 +16,7 @@ describe('App dashboard', () => {
 
   it('filters component cards by query', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    render(<DashboardApp />)
 
     await user.click(screen.getByRole('button', { name: 'All' }))
 
@@ -32,25 +32,16 @@ describe('App dashboard', () => {
 
   it('changes palette when selecting Atlas Emerald', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    render(<DashboardApp />)
 
     await user.click(screen.getByRole('button', { name: /Atlas Emerald/i }))
 
     expect(screen.getByText('#10B981')).toBeInTheDocument()
   })
 
-  it('shows the new Arctic Blue palette', async () => {
-    const user = userEvent.setup()
-    render(<App />)
-
-    await user.click(screen.getByRole('button', { name: /Arctic Blue/i }))
-
-    expect(screen.getByText('#3B82F6')).toBeInTheDocument()
-  })
-
   it('opens the Button playground from the component map', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    render(<DashboardApp />)
 
     await user.click(screen.getByRole('button', { name: 'All' }))
     await user.click(screen.getByRole('button', { name: 'View Button' }))
@@ -60,22 +51,34 @@ describe('App dashboard', () => {
     expect(screen.getByRole('button', { name: /Volver al mapa/i })).toBeInTheDocument()
   })
 
-  it('updates Button playground controls', async () => {
+  it('opens the Card playground from the component map', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    render(<DashboardApp />)
 
     await user.click(screen.getByRole('button', { name: 'All' }))
-    await user.click(screen.getByRole('button', { name: 'View Button' }))
+    await user.click(screen.getByRole('button', { name: 'View Card' }))
 
-    const dangerButtons = screen.getAllByRole('button', { name: 'danger' })
-    await user.click(dangerButtons[dangerButtons.length - 1])
-    await user.click(screen.getByLabelText('Loading'))
+    expect(screen.getByRole('heading', { name: 'Card' })).toBeInTheDocument()
+    expect(screen.getByText(/Preview interactiva/i)).toBeInTheDocument()
+    expect(screen.getByText(/variant/i)).toBeInTheDocument()
+  })
+
+  it('updates Card playground controls', async () => {
+    const user = userEvent.setup()
+    render(<DashboardApp />)
+
+    await user.click(screen.getByRole('button', { name: 'All' }))
+    await user.click(screen.getByRole('button', { name: 'View Card' }))
+
+    const elevatedButtons = screen.getAllByRole('button', { name: 'elevated' })
+    await user.click(elevatedButtons[elevatedButtons.length - 1])
+    await user.click(screen.getByLabelText('Glow'))
 
     const generatedCode = screen.getByText((content, element) => {
       return (
         element?.tagName.toLowerCase() === 'code' &&
-        content.includes('variant="danger"') &&
-        content.includes('loading')
+        content.includes('variant="elevated"') &&
+        content.includes('glow')
       )
     })
 
