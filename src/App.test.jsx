@@ -71,7 +71,14 @@ describe('App dashboard', () => {
     await user.click(dangerButtons[dangerButtons.length - 1])
     await user.click(screen.getByLabelText('Loading'))
 
-    expect(screen.getByText(/variant="danger"/i)).toBeInTheDocument()
-    expect(screen.getByText(/loading/i)).toBeInTheDocument()
+    const generatedCode = screen.getByText((content, element) => {
+      return (
+        element?.tagName.toLowerCase() === 'code' &&
+        content.includes('variant="danger"') &&
+        content.includes('loading')
+      )
+    })
+
+    expect(generatedCode).toBeInTheDocument()
   })
 })
