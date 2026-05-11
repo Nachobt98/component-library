@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import './Card.css'
 
 function cx(...classes) {
@@ -86,6 +87,38 @@ function Actions({ children, align = 'end', className, ...props }) {
       {children}
     </div>
   )
+}
+
+const baseSlotPropTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+}
+
+Root.propTypes = {
+  as: PropTypes.elementType,
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  glow: PropTypes.bool,
+  hoverable: PropTypes.bool,
+  padding: PropTypes.oneOf(['none', 'sm', 'md', 'lg']),
+  palette: PropTypes.object,
+  radius: PropTypes.oneOf(['sm', 'md', 'lg', 'xl', 'full']),
+  selected: PropTypes.bool,
+  variant: PropTypes.oneOf(['solid', 'glass', 'outline', 'elevated']),
+}
+
+Header.propTypes = baseSlotPropTypes
+Title.propTypes = {
+  ...baseSlotPropTypes,
+  as: PropTypes.elementType,
+}
+Description.propTypes = baseSlotPropTypes
+Content.propTypes = baseSlotPropTypes
+Footer.propTypes = baseSlotPropTypes
+Actions.propTypes = {
+  ...baseSlotPropTypes,
+  align: PropTypes.oneOf(['start', 'center', 'end', 'between']),
 }
 
 export const Card = Object.assign(Root, {
