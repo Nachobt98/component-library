@@ -7,6 +7,7 @@ import { BooleanControlList, OptionGroup } from './PlaygroundControls'
 
 const densities = ['compact', 'normal', 'comfortable']
 const radii = ['sm', 'md', 'lg']
+const statusOrder = { ready: 1, draft: 2, planned: 3 }
 
 const rows = [
   { id: 'CMP-101', name: 'Button', owner: 'Core team', status: 'ready', usage: 94, updated: '2026-05-08' },
@@ -28,12 +29,12 @@ StatusBadge.propTypes = {
 }
 
 const columns = [
-  { key: 'name', header: 'Component', accessor: 'name' },
+  { key: 'name', header: 'Component', accessor: 'name', sticky: 'left' },
   { key: 'owner', header: 'Owner', accessor: 'owner' },
-  { key: 'status', header: 'Status', accessor: 'status', cell: (_row, value) => <StatusBadge value={value} /> },
+  { key: 'status', header: 'Status', accessor: 'status', cell: (_row, value) => <StatusBadge value={value} />, sortFn: (a, b) => statusOrder[a.status] - statusOrder[b.status] },
   { key: 'usage', header: 'Usage', accessor: 'usage', align: 'right', cell: (_row, value) => `${value}%` },
   { key: 'updated', header: 'Updated', accessor: 'updated' },
-  { key: 'actions', header: '', accessor: 'id', sortable: false, searchable: false, align: 'right', cell: () => <button aria-label="Row actions" className="cl-data-table__page-button" type="button"><MoreHorizontal size={16} /></button> },
+  { key: 'actions', header: '', accessor: 'id', sortable: false, searchable: false, align: 'right', sticky: 'right', cell: () => <button aria-label="Row actions" className="cl-data-table__page-button" type="button"><MoreHorizontal size={16} /></button> },
 ]
 
 function buildCode(controls) {
@@ -43,6 +44,8 @@ function buildCode(controls) {
   if (controls.selectable) props.push('selectable')
   if (controls.paginated) props.push('paginated')
   if (controls.loading) props.push('loading')
+  props.push('onRowClick={(row) => console.log(row)}')
+  props.push('onSelectionChange={(keys, rows) => console.log(keys, rows)}')
   props.push(`density="${controls.density}"`)
   props.push(`radius="${controls.radius}"`)
   props.push('pageSize={5}')
@@ -65,12 +68,12 @@ export function DataTablePlayground({ controls, onControlsChange, onBack }) {
           <div>
             <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-white/70"><Sparkles className="h-3.5 w-3.5" /> Data component</div>
             <Card.Title as="h2" className="text-3xl">DataTable</Card.Title>
-            <Card.Description className="max-w-2xl">Tabla profesional con búsqueda, ordenación, selección, paginación, densidades, empty state y loading skeleton.</Card.Description>
+            <Card.Description className="max-w-2xl">Tabla profesional con búsqueda, ordenación custom, selección, sticky columns, paginación, empty state y loading skeleton.</Card.Description>
           </div>
           <div className="flex flex-wrap gap-2">
             <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">Search</span>
-            <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">Sort</span>
-            <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">Pagination</span>
+            <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">Sticky columns</span>
+            <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">Callbacks</span>
           </div>
         </div>
       </Card>
@@ -79,7 +82,7 @@ export function DataTablePlayground({ controls, onControlsChange, onBack }) {
         <div className="rounded-3xl border border-white/10 bg-white/[0.055] p-6 backdrop-blur-xl">
           <div className="mb-5">
             <h3 className="text-xl font-semibold text-white">Preview interactiva</h3>
-            <p className="mt-1 text-sm text-white/45">Prueba búsqueda, ordenación, selección y paginación en el componente real.</p>
+            <p className="mt-1 text-sm text-white/45">Prueba búsqueda, ordenación, selección, columnas sticky y paginación en el componente real.</p>
           </div>
           <DataTable
             actions={<><Button leftIcon={<Plus />} size="sm" variant="primary">Add</Button><Button leftIcon={<Download />} size="sm" variant="secondary">Export</Button></>}
@@ -87,7 +90,11 @@ export function DataTablePlayground({ controls, onControlsChange, onBack }) {
             data={rows}
             density={controls.density}
             description="Sortable, searchable and selectable table."
+            filteredEmptyDescription="No component matches that search. Try another component name."
+            filteredEmptyTitle="No matching components"
             loading={controls.loading}
+            onRowClick={() => undefined}
+            onSelectionChange={() => undefined}
             pageSize={5}
             paginated={controls.paginated}
             radius={controls.radius}
