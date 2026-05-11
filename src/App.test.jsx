@@ -60,7 +60,7 @@ describe('Dashboard app', () => {
 
     expect(screen.getByRole('heading', { name: 'Card' })).toBeInTheDocument()
     expect(screen.getByText(/Preview interactiva/i)).toBeInTheDocument()
-    expect(screen.getByText(/variant/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Volver al mapa/i })).toBeInTheDocument()
   })
 
   it('updates Card playground controls', async () => {
