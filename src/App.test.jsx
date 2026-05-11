@@ -107,7 +107,6 @@ describe('Dashboard app', () => {
     await user.click(screen.getByRole('button', { name: 'password' }))
     await user.click(screen.getByRole('button', { name: 'standard' }))
     await user.click(screen.getByRole('button', { name: 'error' }))
-    await user.click(screen.getByLabelText('Icon'))
     await user.click(screen.getByRole('button', { name: 'right' }))
 
     const generatedCode = screen.getByText((content, element) => {
