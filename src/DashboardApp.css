@@ -1,0 +1,21 @@
+.dashboard-app__swatch-color {
+  background: var(--cl-swatch-color);
+}
+
+.dashboard-app__swatch-color--primary { --cl-swatch-color: var(--cl-color-primary); }
+.dashboard-app__swatch-color--secondary { --cl-swatch-color: var(--cl-color-secondary); }
+.dashboard-app__swatch-color--accent { --cl-swatch-color: var(--cl-color-accent); }
+
+.dashboard-app__palette-dot--primary { background: var(--cl-color-primary); }
+.dashboard-app__palette-dot--secondary { background: var(--cl-color-secondary); }
+.dashboard-app__palette-dot--accent { background: var(--cl-color-accent); }
+
+.dashboard-app__group-button--active {
+  background: var(--cl-palette-soft);
+  color: rgb(15 23 42 / 1);
+}
+
+.dashboard-app__component-icon {
+  color: var(--cl-color-primary);
+  background: color-mix(in srgb, var(--cl-color-primary) 13%, transparent);
+}
