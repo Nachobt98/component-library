@@ -8,12 +8,14 @@ function cx(...classes) {
 export function InputField({
   id,
   label,
+  ariaLabel,
   name,
   type = 'text',
   value,
   defaultValue,
   placeholder,
   onChange,
+  variant = 'filled',
   size = 'md',
   radius,
   disabled = false,
@@ -22,10 +24,8 @@ export function InputField({
   helperText,
   error,
   success,
-  leftIcon,
-  rightIcon,
-  prefix,
-  suffix,
+  icon,
+  iconPosition = 'left',
   className,
   inputClassName,
   ...props
@@ -35,6 +35,8 @@ export function InputField({
   const hasSuccess = Boolean(success) && !hasError
   const message = error || success || helperText
   const messageId = message && fieldId ? `${fieldId}-message` : undefined
+  const shouldShowLeftIcon = icon && iconPosition === 'left'
+  const shouldShowRightIcon = icon && iconPosition === 'right'
 
   return (
     <div className={cx('cl-input-field', className)}>
@@ -50,6 +52,7 @@ export function InputField({
       <div
         className={cx(
           'cl-input-field__control',
+          `cl-input-field__control--${variant}`,
           `cl-input-field__control--${size}`,
           radius && `cl-input-field__control--radius-${radius}`,
           disabled && 'cl-input-field__control--disabled',
@@ -57,11 +60,11 @@ export function InputField({
           hasSuccess && 'cl-input-field__control--success',
         )}
       >
-        {leftIcon ? <span className="cl-input-field__icon">{leftIcon}</span> : null}
-        {prefix ? <span className="cl-input-field__affix">{prefix}</span> : null}
+        {shouldShowLeftIcon ? <span className="cl-input-field__icon">{icon}</span> : null}
         <input
           aria-describedby={messageId}
           aria-invalid={hasError || undefined}
+          aria-label={!label ? ariaLabel ?? placeholder : undefined}
           className={cx('cl-input-field__input', `cl-input-field__input--${size}`, inputClassName)}
           defaultValue={defaultValue}
           disabled={disabled}
@@ -74,8 +77,7 @@ export function InputField({
           value={value}
           {...props}
         />
-        {suffix ? <span className="cl-input-field__affix">{suffix}</span> : null}
-        {rightIcon ? <span className="cl-input-field__icon">{rightIcon}</span> : null}
+        {shouldShowRightIcon ? <span className="cl-input-field__icon">{icon}</span> : null}
       </div>
 
       {message ? (
