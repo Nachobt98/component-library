@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { AlertCircle, CheckCircle2 } from 'lucide-react'
 import './InputField.css'
 
@@ -96,4 +97,29 @@ export function InputField({
       ) : null}
     </div>
   )
+}
+
+InputField.propTypes = {
+  ariaLabel: PropTypes.string,
+  className: PropTypes.string,
+  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  disabled: PropTypes.bool,
+  error: PropTypes.node,
+  helperText: PropTypes.node,
+  icon: PropTypes.node,
+  iconPosition: PropTypes.oneOf(['left', 'right']),
+  id: PropTypes.string,
+  inputClassName: PropTypes.string,
+  label: PropTypes.node,
+  name: PropTypes.string,
+  onChange: PropTypes.func,
+  optionalText: PropTypes.node,
+  placeholder: PropTypes.string,
+  radius: PropTypes.oneOf(['sm', 'md', 'lg', 'full']),
+  required: PropTypes.bool,
+  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  success: PropTypes.node,
+  type: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  variant: PropTypes.oneOf(['filled', 'standard']),
 }
