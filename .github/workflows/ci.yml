@@ -30,6 +30,11 @@ jobs:
       - name: Install dependencies
         run: npm ci --include=optional
 
+      - name: Ensure rolldown native binding
+        run: |
+          ROLLDOWN_VERSION=$(node -p "require('./node_modules/rolldown/package.json').version")
+          npm install --no-save --include=optional "@rolldown/binding-linux-x64-gnu@${ROLLDOWN_VERSION}"
+
       - name: Lint
         run: npm run lint
 
