@@ -32,8 +32,6 @@
   display: flex;
   align-items: center;
   width: 100%;
-  border: 1px solid var(--cl-border-1);
-  background: rgb(255 255 255 / 0.055);
   color: var(--cl-text-1);
   transition:
     border-color 180ms ease,
@@ -42,9 +40,25 @@
     opacity 180ms ease;
 }
 
-.cl-input-field__control:hover {
+.cl-input-field__control--filled {
+  border: 1px solid var(--cl-border-1);
+  background: rgb(255 255 255 / 0.055);
+}
+
+.cl-input-field__control--filled:hover {
   border-color: rgb(255 255 255 / 0.18);
   background: rgb(255 255 255 / 0.075);
+}
+
+.cl-input-field__control--standard {
+  border: 0;
+  border-bottom: 1px solid var(--cl-border-2);
+  background: transparent;
+  padding-inline: 0;
+}
+
+.cl-input-field__control--standard:hover {
+  border-bottom-color: rgb(255 255 255 / 0.42);
 }
 
 .cl-input-field__control:focus-within {
@@ -52,6 +66,12 @@
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--cl-color-primary) 35%, transparent),
     0 18px 45px color-mix(in srgb, var(--cl-color-primary) 12%, transparent);
+}
+
+.cl-input-field__control--standard:focus-within {
+  border-color: transparent;
+  border-bottom-color: var(--cl-color-primary);
+  box-shadow: 0 1px 0 0 var(--cl-color-primary);
 }
 
 .cl-input-field__control--disabled {
@@ -64,9 +84,21 @@
   background: rgb(244 63 94 / 0.08);
 }
 
+.cl-input-field__control--standard.cl-input-field__control--invalid {
+  border-color: transparent;
+  border-bottom-color: rgb(251 113 133 / 0.8);
+  background: transparent;
+}
+
 .cl-input-field__control--success {
   border-color: rgb(34 197 94 / 0.45);
   background: rgb(34 197 94 / 0.07);
+}
+
+.cl-input-field__control--standard.cl-input-field__control--success {
+  border-color: transparent;
+  border-bottom-color: rgb(34 197 94 / 0.75);
+  background: transparent;
 }
 
 .cl-input-field__control--sm {
@@ -84,10 +116,23 @@
   padding-inline: 1rem;
 }
 
+.cl-input-field__control--standard.cl-input-field__control--sm,
+.cl-input-field__control--standard.cl-input-field__control--md,
+.cl-input-field__control--standard.cl-input-field__control--lg {
+  padding-inline: 0;
+}
+
 .cl-input-field__control--radius-sm { border-radius: 0.5rem; }
 .cl-input-field__control--radius-md { border-radius: 0.75rem; }
 .cl-input-field__control--radius-lg { border-radius: 1rem; }
 .cl-input-field__control--radius-full { border-radius: 9999px; }
+
+.cl-input-field__control--standard.cl-input-field__control--radius-sm,
+.cl-input-field__control--standard.cl-input-field__control--radius-md,
+.cl-input-field__control--standard.cl-input-field__control--radius-lg,
+.cl-input-field__control--standard.cl-input-field__control--radius-full {
+  border-radius: 0;
+}
 
 .cl-input-field__icon {
   display: grid;
@@ -118,13 +163,6 @@
 .cl-input-field__input--sm { font-size: 0.875rem; }
 .cl-input-field__input--md { font-size: 0.875rem; }
 .cl-input-field__input--lg { font-size: 1rem; }
-
-.cl-input-field__affix {
-  flex: none;
-  color: var(--cl-text-3);
-  font-size: 0.8125rem;
-  font-weight: 600;
-}
 
 .cl-input-field__message-row {
   display: flex;
