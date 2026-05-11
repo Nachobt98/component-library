@@ -1,9 +1,8 @@
 const variantStyles = {
-  solid: 'border-white/10 bg-white/[0.065]',
-  glass: 'border-white/12 bg-white/[0.075] backdrop-blur-xl',
-  outline: 'border-white/18 bg-transparent',
-  elevated: 'border-white/10 bg-white/[0.075] shadow-2xl shadow-black/30',
-  interactive: 'border-white/10 bg-white/[0.065] transition duration-200 ease-out hover:-translate-y-1 hover:bg-white/[0.095]',
+  solid: 'border-white/10 bg-white/[0.06]',
+  glass: 'border-white/15 bg-white/[0.09] backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.10)]',
+  outline: 'border-white/20 bg-transparent',
+  elevated: 'border-white/14 bg-slate-950/70 shadow-[0_24px_80px_rgba(0,0,0,0.45)]',
 }
 
 const paddingStyles = {
@@ -64,7 +63,7 @@ function Root({
         variantStyles[variant],
         paddingStyles[padding],
         radiusStyles[radius],
-        hoverable && 'transition duration-200 ease-out hover:-translate-y-1 hover:bg-white/[0.095]',
+        hoverable && 'cursor-pointer transition duration-200 ease-out hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.10]',
         selected && 'ring-2 ring-white/45',
         disabled && 'pointer-events-none opacity-50',
         className,
