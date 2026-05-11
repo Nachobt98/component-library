@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Boxes, ChevronRight, Component, Gauge, Palette, Search, Sparkles } from 'lucide-react'
 import { ButtonPlayground } from './components/playgrounds/ButtonPlayground'
 import { CardPlayground } from './components/playgrounds/CardPlayground'
+import { InputFieldPlayground } from './components/playgrounds/InputFieldPlayground'
 import { Card } from './components/ui/Card'
 
 const palettes = {
@@ -61,7 +62,7 @@ const groups = ['Core', 'Forms', 'Data', 'Navigation', 'Feedback', 'Special']
 const components = [
   { id: 'button', name: 'Button', group: 'Core', impact: 94, complexity: 'Baja', badge: 'base', ready: true, desc: 'Variants: primary, secondary, outline, ghost, soft, danger y link. Tamaños, radios y estados configurables.' },
   { id: 'card', name: 'Card', group: 'Core', impact: 91, complexity: 'Baja', badge: 'layout', ready: true, desc: 'Surface composable con variant y padding obligatorios; radius, estados y slots opcionales.' },
-  { id: 'input', name: 'Input Field', group: 'Forms', impact: 90, complexity: 'Media', badge: 'a11y', desc: 'Label persistente, helper text, error state, icon slots y validación visual.' },
+  { id: 'input', name: 'Input Field', group: 'Forms', impact: 90, complexity: 'Media', badge: 'a11y', ready: true, desc: 'Label obligatorio, helper text, error/success state, icon slots y validación visual.' },
   { id: 'select', name: 'Select / Combobox', group: 'Forms', impact: 88, complexity: 'Alta', badge: 'headless', desc: 'Búsqueda, grupos, empty state, keyboard nav y tokens de altura.' },
   { id: 'alert-toast', name: 'Alert / Toast', group: 'Feedback', impact: 82, complexity: 'Media', badge: 'motion', desc: 'Stack animado con success, info, warning y danger.' },
   { id: 'table', name: 'Table Pro', group: 'Data', impact: 89, complexity: 'Alta', badge: 'data', desc: 'Sorting, density, sticky actions, empty state y skeleton loading.' },
@@ -92,6 +93,22 @@ const initialCardControls = {
   glow: false,
   withHeader: true,
   withFooter: true,
+}
+
+const initialInputControls = {
+  type: 'email',
+  label: 'Email',
+  size: 'md',
+  radius: 'lg',
+  state: 'default',
+  required: true,
+  disabled: false,
+  withHelper: true,
+  optionalText: false,
+  withLeftIcon: true,
+  withRightIcon: false,
+  withPrefix: false,
+  withSuffix: false,
 }
 
 function cx(...classes) {
@@ -166,6 +183,7 @@ export default function DashboardApp() {
   const [selectedComponent, setSelectedComponent] = useState(null)
   const [buttonControls, setButtonControls] = useState(initialButtonControls)
   const [cardControls, setCardControls] = useState(initialCardControls)
+  const [inputControls, setInputControls] = useState(initialInputControls)
 
   const palette = palettes[paletteKey]
   const filtered = useMemo(() => {
@@ -177,7 +195,7 @@ export default function DashboardApp() {
   }, [activeGroup, query])
 
   return (
-    <main className={cx('min-h-screen overflow-hidden bg-gradient-to-br p-4 text-white sm:p-6 lg:p-8', palette.bg)}>
+    <main className={cx('min-h-screen overflow-hidden bg-gradient-to-br p-4 text-white sm:p-6 lg:p-8', palette.bg, `palette-${paletteKey}`)}>
       <section className="relative mx-auto max-w-7xl">
         <header className="mb-6 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -226,6 +244,8 @@ export default function DashboardApp() {
               <ButtonPlayground controls={buttonControls} onBack={() => setSelectedComponent(null)} onControlsChange={setButtonControls} palette={palette} />
             ) : selectedComponent === 'card' ? (
               <CardPlayground controls={cardControls} onBack={() => setSelectedComponent(null)} onControlsChange={setCardControls} palette={palette} />
+            ) : selectedComponent === 'input' ? (
+              <InputFieldPlayground controls={inputControls} onBack={() => setSelectedComponent(null)} onControlsChange={setInputControls} />
             ) : (
               <ComponentMap activeGroup={activeGroup} filtered={filtered} onOpenComponent={setSelectedComponent} palette={palette} query={query} setActiveGroup={setActiveGroup} setQuery={setQuery} />
             )}
