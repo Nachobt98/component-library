@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Boxes, ChevronRight, Component, Gauge, Palette, Search, Sparkles } from 'lucide-react'
 import { ButtonPlayground } from './components/playgrounds/ButtonPlayground'
 import { CardPlayground } from './components/playgrounds/CardPlayground'
+import { DataTablePlayground } from './components/playgrounds/DataTablePlayground'
 import { InputFieldPlayground } from './components/playgrounds/InputFieldPlayground'
 import { Card } from './components/ui/Card'
 import './DashboardApp.css'
@@ -66,7 +67,7 @@ const components = [
   { id: 'input', name: 'Input Field', group: 'Forms', impact: 90, complexity: 'Media', badge: 'a11y', ready: true, desc: 'Label opcional accesible, variant filled/standard, icono posicionable y estados semánticos.' },
   { id: 'select', name: 'Select / Combobox', group: 'Forms', impact: 88, complexity: 'Alta', badge: 'headless', desc: 'Búsqueda, grupos, empty state, keyboard nav y tokens de altura.' },
   { id: 'alert-toast', name: 'Alert / Toast', group: 'Feedback', impact: 82, complexity: 'Media', badge: 'motion', desc: 'Stack animado con success, info, warning y danger.' },
-  { id: 'table', name: 'Table Pro', group: 'Data', impact: 89, complexity: 'Alta', badge: 'data', desc: 'Sorting, density, sticky actions, empty state y skeleton loading.' },
+  { id: 'table', name: 'Table Pro', group: 'Data', impact: 93, complexity: 'Alta', badge: 'data', ready: true, desc: 'Búsqueda, ordenación, selección, paginación, densidad, empty state y loading skeleton.' },
   { id: 'tabs', name: 'Tabs', group: 'Navigation', impact: 78, complexity: 'Media', badge: 'nav', desc: 'Underline, pill, segmented, icon tabs y orientación vertical.' },
   { id: 'command-palette', name: 'Command Palette', group: 'Special', impact: 87, complexity: 'Alta', badge: 'wow', desc: 'Buscador global estilo IDE: acciones, atajos, grupos y navegación rápida.' },
   { id: 'stat-orb', name: 'Stat Orb', group: 'Special', impact: 74, complexity: 'Media', badge: 'visual', desc: 'Indicador circular con gradiente, progreso, delta y estado semántico.' },
@@ -110,6 +111,16 @@ const initialInputControls = {
   withHelper: true,
   optionalText: false,
   withIcon: true,
+}
+
+const initialTableControls = {
+  density: 'normal',
+  radius: 'lg',
+  searchable: true,
+  sortable: true,
+  selectable: true,
+  paginated: true,
+  loading: false,
 }
 
 function cx(...classes) {
@@ -185,6 +196,7 @@ export default function DashboardApp() {
   const [buttonControls, setButtonControls] = useState(initialButtonControls)
   const [cardControls, setCardControls] = useState(initialCardControls)
   const [inputControls, setInputControls] = useState(initialInputControls)
+  const [tableControls, setTableControls] = useState(initialTableControls)
 
   const palette = palettes[paletteKey]
   const filtered = useMemo(() => {
@@ -247,6 +259,8 @@ export default function DashboardApp() {
               <CardPlayground controls={cardControls} onBack={() => setSelectedComponent(null)} onControlsChange={setCardControls} palette={palette} />
             ) : selectedComponent === 'input' ? (
               <InputFieldPlayground controls={inputControls} onBack={() => setSelectedComponent(null)} onControlsChange={setInputControls} />
+            ) : selectedComponent === 'table' ? (
+              <DataTablePlayground controls={tableControls} onBack={() => setSelectedComponent(null)} onControlsChange={setTableControls} />
             ) : (
               <ComponentMap activeGroup={activeGroup} filtered={filtered} onOpenComponent={setSelectedComponent} query={query} setActiveGroup={setActiveGroup} setQuery={setQuery} />
             )}
