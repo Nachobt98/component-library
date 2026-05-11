@@ -63,6 +63,18 @@ describe('Dashboard app', () => {
     expect(screen.getByRole('button', { name: /Volver al mapa/i })).toBeInTheDocument()
   })
 
+  it('opens the Input Field playground from the component map', async () => {
+    const user = userEvent.setup()
+    render(<DashboardApp />)
+
+    await user.click(screen.getByRole('button', { name: 'All' }))
+    await user.click(screen.getByRole('button', { name: 'View Input Field' }))
+
+    expect(screen.getByRole('heading', { name: 'Input Field' })).toBeInTheDocument()
+    expect(screen.getByText(/Preview interactiva/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Email/i)).toBeInTheDocument()
+  })
+
   it('updates Card playground controls', async () => {
     const user = userEvent.setup()
     render(<DashboardApp />)
@@ -79,6 +91,29 @@ describe('Dashboard app', () => {
         element?.tagName.toLowerCase() === 'code' &&
         content.includes('variant="elevated"') &&
         content.includes('glow')
+      )
+    })
+
+    expect(generatedCode).toBeInTheDocument()
+  })
+
+  it('updates Input Field playground controls', async () => {
+    const user = userEvent.setup()
+    render(<DashboardApp />)
+
+    await user.click(screen.getByRole('button', { name: 'All' }))
+    await user.click(screen.getByRole('button', { name: 'View Input Field' }))
+
+    await user.click(screen.getByRole('button', { name: 'password' }))
+    await user.click(screen.getByRole('button', { name: 'error' }))
+    await user.click(screen.getByLabelText('Right icon'))
+
+    const generatedCode = screen.getByText((content, element) => {
+      return (
+        element?.tagName.toLowerCase() === 'code' &&
+        content.includes('type="password"') &&
+        content.includes('error="Enter a valid email address."') &&
+        content.includes('rightIcon={<Eye />}')
       )
     })
 
