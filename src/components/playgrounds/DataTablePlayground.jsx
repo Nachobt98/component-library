@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { ArrowLeft, Download, MoreHorizontal, Plus, Sparkles } from 'lucide-react'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
@@ -20,6 +21,10 @@ const rows = [
 function StatusBadge({ value }) {
   const tone = value === 'ready' ? 'success' : value === 'draft' ? 'warning' : 'danger'
   return <span className={`cl-data-table__badge cl-data-table__badge--${tone}`}>{value}</span>
+}
+
+StatusBadge.propTypes = {
+  value: PropTypes.string.isRequired,
 }
 
 const columns = [
@@ -124,6 +129,16 @@ export function DataTablePlayground({ controls, onControlsChange, onBack }) {
   )
 }
 
-StatusBadge.propTypes = {
-  value: String,
+DataTablePlayground.propTypes = {
+  controls: PropTypes.shape({
+    density: PropTypes.oneOf(densities).isRequired,
+    loading: PropTypes.bool.isRequired,
+    paginated: PropTypes.bool.isRequired,
+    radius: PropTypes.oneOf(radii).isRequired,
+    searchable: PropTypes.bool.isRequired,
+    selectable: PropTypes.bool.isRequired,
+    sortable: PropTypes.bool.isRequired,
+  }).isRequired,
+  onBack: PropTypes.func.isRequired,
+  onControlsChange: PropTypes.func.isRequired,
 }
