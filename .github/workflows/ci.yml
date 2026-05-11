@@ -27,11 +27,8 @@ jobs:
         with:
           node-version: 22
 
-      - name: Generate lockfile
-        run: npm install --package-lock-only --ignore-scripts
-
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --include=optional
 
       - name: Lint
         run: npm run lint
