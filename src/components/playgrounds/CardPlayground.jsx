@@ -1,53 +1,12 @@
 import { ArrowLeft, BadgeCheck, Boxes, ExternalLink, Sparkles } from 'lucide-react'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
+import { BooleanControlList, OptionGroup } from './PlaygroundControls'
 
 const variants = ['solid', 'glass', 'outline', 'elevated']
 const paddings = ['none', 'sm', 'md', 'lg']
 const radii = ['sm', 'md', 'lg', 'xl', 'full']
 const actionAlignments = ['start', 'center', 'end', 'between']
-
-function cx(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
-function OptionGroup({ label, value, options, onChange, optional = false }) {
-  return (
-    <div>
-      <div className="mb-2 flex items-center justify-between gap-3">
-        <p className="text-xs uppercase tracking-[0.2em] text-white/35">{label}</p>
-        {optional && value ? (
-          <button
-            className="rounded-full px-2 py-1 text-[11px] text-white/35 transition hover:bg-white/8 hover:text-white/65"
-            onClick={() => onChange(undefined)}
-            type="button"
-          >
-            Clear
-          </button>
-        ) : null}
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {options.map((option) => {
-          const isSelected = value === option
-
-          return (
-            <button
-              key={option}
-              className={cx(
-                'rounded-xl px-3 py-2 text-xs capitalize transition',
-                isSelected ? 'bg-white text-slate-950' : 'bg-white/8 text-white/60 hover:bg-white/12',
-              )}
-              onClick={() => onChange(optional && isSelected ? undefined : option)}
-              type="button"
-            >
-              {option}
-            </button>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
 
 function buildCode(controls) {
   const props = [`variant="${controls.variant}"`, `padding="${controls.padding}"`]
@@ -191,21 +150,18 @@ export function CardPlayground({ palette, controls, onControlsChange, onBack }) 
               <OptionGroup label="Padding" onChange={(padding) => update({ padding })} options={paddings} value={controls.padding} />
               <OptionGroup label="Radius" onChange={(radius) => update({ radius })} options={radii} optional value={controls.radius} />
               <OptionGroup label="Actions align" onChange={(actionAlign) => update({ actionAlign })} options={actionAlignments} value={controls.actionAlign} />
-              <div className="space-y-2">
-                {[
+              <BooleanControlList
+                controls={controls}
+                items={[
                   ['hoverable', 'Hoverable'],
                   ['selected', 'Selected'],
                   ['disabled', 'Disabled'],
                   ['glow', 'Glow'],
                   ['withHeader', 'Header'],
                   ['withFooter', 'Footer/actions'],
-                ].map(([key, label]) => (
-                  <label key={key} className="flex cursor-pointer items-center justify-between rounded-2xl border border-white/8 bg-white/[0.035] px-3 py-2 text-sm text-white/65">
-                    {label}
-                    <input checked={Boolean(controls[key])} onChange={(event) => update({ [key]: event.target.checked })} type="checkbox" />
-                  </label>
-                ))}
-              </div>
+                ]}
+                onChange={update}
+              />
             </div>
           </Card>
 
