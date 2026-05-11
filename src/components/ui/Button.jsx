@@ -16,10 +16,12 @@ export function Button({
   fullWidth = false,
   leftIcon,
   rightIcon,
+  palette,
   className,
   type = 'button',
   ...props
 }) {
+  void palette
   const isDisabled = disabled || loading
 
   return (
