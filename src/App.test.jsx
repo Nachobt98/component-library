@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import DashboardApp from './DashboardApp'
@@ -75,6 +75,18 @@ describe('Dashboard app', () => {
     expect(screen.getByLabelText(/Email/i)).toBeInTheDocument()
   })
 
+  it('opens the DataTable playground from the component map', async () => {
+    const user = userEvent.setup()
+    render(<DashboardApp />)
+
+    await user.click(screen.getByRole('button', { name: 'All' }))
+    await user.click(screen.getByRole('button', { name: 'View Table Pro' }))
+
+    expect(screen.getByRole('heading', { name: 'DataTable' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Component inventory' })).toBeInTheDocument()
+    expect(screen.getByRole('columnheader', { name: /Component/i })).toBeInTheDocument()
+  })
+
   it('updates Card playground controls', async () => {
     const user = userEvent.setup()
     render(<DashboardApp />)
@@ -121,5 +133,23 @@ describe('Dashboard app', () => {
     })
 
     expect(generatedCode).toBeInTheDocument()
+  })
+
+  it('filters and selects rows in the DataTable playground', async () => {
+    const user = userEvent.setup()
+    render(<DashboardApp />)
+
+    await user.click(screen.getByRole('button', { name: 'All' }))
+    await user.click(screen.getByRole('button', { name: 'View Table Pro' }))
+
+    const tableRegion = screen.getByRole('heading', { name: 'Component inventory' }).closest('section')
+    const searchInput = within(tableRegion).getByLabelText('Search...')
+    await user.type(searchInput, 'card')
+
+    expect(within(tableRegion).getByText('Card')).toBeInTheDocument()
+    expect(within(tableRegion).queryByText('Button')).not.toBeInTheDocument()
+
+    await user.click(within(tableRegion).getByLabelText('Select row CMP-102'))
+    expect(within(tableRegion).getByText(/1 selected/i)).toBeInTheDocument()
   })
 })
