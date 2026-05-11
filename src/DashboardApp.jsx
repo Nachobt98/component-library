@@ -63,7 +63,7 @@ const groups = ['Core', 'Forms', 'Data', 'Navigation', 'Feedback', 'Special']
 const components = [
   { id: 'button', name: 'Button', group: 'Core', impact: 94, complexity: 'Baja', badge: 'base', ready: true, desc: 'Variants: primary, secondary, outline, ghost, soft, danger y link. Tamaños, radios y estados configurables.' },
   { id: 'card', name: 'Card', group: 'Core', impact: 91, complexity: 'Baja', badge: 'layout', ready: true, desc: 'Surface composable con variant y padding obligatorios; radius, estados y slots opcionales.' },
-  { id: 'input', name: 'Input Field', group: 'Forms', impact: 90, complexity: 'Media', badge: 'a11y', ready: true, desc: 'Label obligatorio, helper text, error/success state, icon slots y validación visual.' },
+  { id: 'input', name: 'Input Field', group: 'Forms', impact: 90, complexity: 'Media', badge: 'a11y', ready: true, desc: 'Label opcional accesible, variant filled/standard, icono posicionable y estados semánticos.' },
   { id: 'select', name: 'Select / Combobox', group: 'Forms', impact: 88, complexity: 'Alta', badge: 'headless', desc: 'Búsqueda, grupos, empty state, keyboard nav y tokens de altura.' },
   { id: 'alert-toast', name: 'Alert / Toast', group: 'Feedback', impact: 82, complexity: 'Media', badge: 'motion', desc: 'Stack animado con success, info, warning y danger.' },
   { id: 'table', name: 'Table Pro', group: 'Data', impact: 89, complexity: 'Alta', badge: 'data', desc: 'Sorting, density, sticky actions, empty state y skeleton loading.' },
@@ -98,18 +98,18 @@ const initialCardControls = {
 
 const initialInputControls = {
   type: 'email',
+  variant: 'filled',
   label: 'Email',
   size: 'md',
   radius: 'lg',
   state: 'default',
+  iconPosition: 'left',
+  withLabel: true,
   required: true,
   disabled: false,
   withHelper: true,
   optionalText: false,
-  withLeftIcon: true,
-  withRightIcon: false,
-  withPrefix: false,
-  withSuffix: false,
+  withIcon: true,
 }
 
 function cx(...classes) {
