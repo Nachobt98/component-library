@@ -2,7 +2,7 @@ import { ArrowLeft, BadgeCheck, Boxes, ExternalLink, Sparkles } from 'lucide-rea
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
 
-const variants = ['solid', 'glass', 'outline', 'elevated', 'interactive']
+const variants = ['solid', 'glass', 'outline', 'elevated']
 const paddings = ['none', 'sm', 'md', 'lg']
 const radii = ['sm', 'md', 'lg', 'xl', 'full']
 const actionAlignments = ['start', 'center', 'end', 'between']
