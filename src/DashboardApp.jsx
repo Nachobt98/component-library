@@ -3,7 +3,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Boxes, ChevronRight, Component, Gauge, Palette, Search, Sparkles } from 'lucide-react'
 import { ButtonPlayground } from './components/playgrounds/ButtonPlayground'
 import { CardPlayground } from './components/playgrounds/CardPlayground'
+import { InputFieldPlayground } from './components/playgrounds/InputFieldPlayground'
 import { Card } from './components/ui/Card'
+import './DashboardApp.css'
 
 const palettes = {
   nocturne: {
@@ -61,7 +63,7 @@ const groups = ['Core', 'Forms', 'Data', 'Navigation', 'Feedback', 'Special']
 const components = [
   { id: 'button', name: 'Button', group: 'Core', impact: 94, complexity: 'Baja', badge: 'base', ready: true, desc: 'Variants: primary, secondary, outline, ghost, soft, danger y link. Tamaños, radios y estados configurables.' },
   { id: 'card', name: 'Card', group: 'Core', impact: 91, complexity: 'Baja', badge: 'layout', ready: true, desc: 'Surface composable con variant y padding obligatorios; radius, estados y slots opcionales.' },
-  { id: 'input', name: 'Input Field', group: 'Forms', impact: 90, complexity: 'Media', badge: 'a11y', desc: 'Label persistente, helper text, error state, icon slots y validación visual.' },
+  { id: 'input', name: 'Input Field', group: 'Forms', impact: 90, complexity: 'Media', badge: 'a11y', ready: true, desc: 'Label opcional accesible, variant filled/standard, icono posicionable y estados semánticos.' },
   { id: 'select', name: 'Select / Combobox', group: 'Forms', impact: 88, complexity: 'Alta', badge: 'headless', desc: 'Búsqueda, grupos, empty state, keyboard nav y tokens de altura.' },
   { id: 'alert-toast', name: 'Alert / Toast', group: 'Feedback', impact: 82, complexity: 'Media', badge: 'motion', desc: 'Stack animado con success, info, warning y danger.' },
   { id: 'table', name: 'Table Pro', group: 'Data', impact: 89, complexity: 'Alta', badge: 'data', desc: 'Sorting, density, sticky actions, empty state y skeleton loading.' },
@@ -94,23 +96,39 @@ const initialCardControls = {
   withFooter: true,
 }
 
+const initialInputControls = {
+  type: 'email',
+  variant: 'filled',
+  label: 'Email',
+  size: 'md',
+  radius: 'lg',
+  state: 'default',
+  iconPosition: 'left',
+  withLabel: true,
+  required: true,
+  disabled: false,
+  withHelper: true,
+  optionalText: false,
+  withIcon: true,
+}
+
 function cx(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function Swatch({ color, label }) {
+function Swatch({ role, value, label }) {
   return (
     <Card variant="solid" padding="sm" radius="lg" className="flex items-center gap-3">
-      <div className="h-11 w-11 rounded-2xl ring-1 ring-white/20" style={{ background: color }} />
+      <div className={cx('dashboard-app__swatch-color h-11 w-11 rounded-2xl ring-1 ring-white/20', `dashboard-app__swatch-color--${role}`)} />
       <div>
         <p className="text-xs uppercase tracking-[0.22em] text-white/40">{label}</p>
-        <p className="font-mono text-sm text-white/80">{color}</p>
+        <p className="font-mono text-sm text-white/80">{value}</p>
       </div>
     </Card>
   )
 }
 
-function ComponentMap({ activeGroup, filtered, onOpenComponent, palette, query, setActiveGroup, setQuery }) {
+function ComponentMap({ activeGroup, filtered, onOpenComponent, query, setActiveGroup, setQuery }) {
   return (
     <Card variant="glass" padding="md" radius="lg">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -126,7 +144,7 @@ function ComponentMap({ activeGroup, filtered, onOpenComponent, palette, query, 
 
       <div className="mt-4 flex flex-wrap gap-2">
         {['All', ...groups].map((group) => (
-          <button key={group} onClick={() => setActiveGroup(group)} className={cx('rounded-full px-4 py-2 text-sm transition', activeGroup === group ? 'text-slate-950' : 'bg-white/8 text-white/60 hover:bg-white/12')} style={activeGroup === group ? { background: '#FFF1ED' } : undefined} type="button">{group}</button>
+          <button key={group} onClick={() => setActiveGroup(group)} className={cx('rounded-full px-4 py-2 text-sm transition', activeGroup === group ? 'dashboard-app__group-button--active' : 'bg-white/8 text-white/60 hover:bg-white/12')} type="button">{group}</button>
         ))}
       </div>
 
@@ -136,7 +154,7 @@ function ComponentMap({ activeGroup, filtered, onOpenComponent, palette, query, 
             <motion.article layout key={item.id} initial={{ opacity: 0, scale: 0.96, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.96, y: -8 }} transition={{ duration: 0.18 }}>
               <Card variant="solid" padding="md" radius="lg" hoverable>
                 <div className="mb-4 flex items-start justify-between gap-3">
-                  <div className="grid h-11 w-11 place-items-center rounded-2xl" style={{ background: `${palette.primary}20`, color: palette.primary }}>
+                  <div className="dashboard-app__component-icon grid h-11 w-11 place-items-center rounded-2xl">
                     {item.group === 'Data' ? <Gauge className="h-5 w-5" /> : item.group === 'Special' ? <Sparkles className="h-5 w-5" /> : <Boxes className="h-5 w-5" />}
                   </div>
                   <span className="rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-medium text-white/70">{item.badge}</span>
@@ -166,6 +184,7 @@ export default function DashboardApp() {
   const [selectedComponent, setSelectedComponent] = useState(null)
   const [buttonControls, setButtonControls] = useState(initialButtonControls)
   const [cardControls, setCardControls] = useState(initialCardControls)
+  const [inputControls, setInputControls] = useState(initialInputControls)
 
   const palette = palettes[paletteKey]
   const filtered = useMemo(() => {
@@ -177,7 +196,7 @@ export default function DashboardApp() {
   }, [activeGroup, query])
 
   return (
-    <main className={cx('min-h-screen overflow-hidden bg-gradient-to-br p-4 text-white sm:p-6 lg:p-8', palette.bg)}>
+    <main className={cx('min-h-screen overflow-hidden bg-gradient-to-br p-4 text-white sm:p-6 lg:p-8', palette.bg, `palette-${paletteKey}`)}>
       <section className="relative mx-auto max-w-7xl">
         <header className="mb-6 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -207,7 +226,7 @@ export default function DashboardApp() {
                       <p className="mt-1 text-xs text-white/45">{value.mood}</p>
                     </div>
                     <div className="flex -space-x-2">
-                      {[value.primary, value.secondary, value.accent].map((color) => <span key={color} className="h-6 w-6 rounded-full ring-2 ring-slate-950" style={{ background: color }} />)}
+                      {['primary', 'secondary', 'accent'].map((role) => <span key={role} className={cx('h-6 w-6 rounded-full ring-2 ring-slate-950', `dashboard-app__palette-dot--${role}`)} />)}
                     </div>
                   </button>
                 ))}
@@ -217,17 +236,19 @@ export default function DashboardApp() {
 
           <section className="space-y-6">
             <div className="grid gap-4 md:grid-cols-3">
-              <Swatch color={palette.primary} label="Primary" />
-              <Swatch color={palette.secondary} label="Secondary" />
-              <Swatch color={palette.accent} label="Accent" />
+              <Swatch role="primary" value={palette.primary} label="Primary" />
+              <Swatch role="secondary" value={palette.secondary} label="Secondary" />
+              <Swatch role="accent" value={palette.accent} label="Accent" />
             </div>
 
             {selectedComponent === 'button' ? (
               <ButtonPlayground controls={buttonControls} onBack={() => setSelectedComponent(null)} onControlsChange={setButtonControls} palette={palette} />
             ) : selectedComponent === 'card' ? (
               <CardPlayground controls={cardControls} onBack={() => setSelectedComponent(null)} onControlsChange={setCardControls} palette={palette} />
+            ) : selectedComponent === 'input' ? (
+              <InputFieldPlayground controls={inputControls} onBack={() => setSelectedComponent(null)} onControlsChange={setInputControls} />
             ) : (
-              <ComponentMap activeGroup={activeGroup} filtered={filtered} onOpenComponent={setSelectedComponent} palette={palette} query={query} setActiveGroup={setActiveGroup} setQuery={setQuery} />
+              <ComponentMap activeGroup={activeGroup} filtered={filtered} onOpenComponent={setSelectedComponent} query={query} setActiveGroup={setActiveGroup} setQuery={setQuery} />
             )}
           </section>
         </div>

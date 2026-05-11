@@ -1,0 +1,59 @@
+:root {
+  --cl-color-primary: #f9736b;
+  --cl-color-secondary: #8b5cf6;
+  --cl-color-accent: #14b8a6;
+  --cl-color-danger: #fb7185;
+  --cl-color-warning: #f59e0b;
+  --cl-color-success: #22c55e;
+  --cl-surface-1: rgb(255 255 255 / 0.06);
+  --cl-surface-2: rgb(255 255 255 / 0.09);
+  --cl-surface-3: rgb(15 23 42 / 0.7);
+  --cl-border-1: rgb(255 255 255 / 0.1);
+  --cl-border-2: rgb(255 255 255 / 0.18);
+  --cl-text-1: rgb(255 255 255 / 0.94);
+  --cl-text-2: rgb(255 255 255 / 0.68);
+  --cl-text-3: rgb(255 255 255 / 0.46);
+  --cl-focus-ring: rgb(255 255 255 / 0.7);
+}
+
+.palette-nocturne {
+  --cl-color-primary: #f9736b;
+  --cl-color-secondary: #8b5cf6;
+  --cl-color-accent: #14b8a6;
+  --cl-palette-soft: #fff1ed;
+}
+
+.palette-atlas {
+  --cl-color-primary: #10b981;
+  --cl-color-secondary: #38bdf8;
+  --cl-color-accent: #f59e0b;
+  --cl-palette-soft: #ecfdf5;
+}
+
+.palette-ink {
+  --cl-color-primary: #a78bfa;
+  --cl-color-secondary: #f472b6;
+  --cl-color-accent: #fde68a;
+  --cl-palette-soft: #f5f3ff;
+}
+
+.palette-arctic {
+  --cl-color-primary: #3b82f6;
+  --cl-color-secondary: #06b6d4;
+  --cl-color-accent: #a3e635;
+  --cl-palette-soft: #eff6ff;
+}
+
+.palette-graphite {
+  --cl-color-primary: #f59e0b;
+  --cl-color-secondary: #64748b;
+  --cl-color-accent: #22c55e;
+  --cl-palette-soft: #fffbeb;
+}
+
+.palette-rosewood {
+  --cl-color-primary: #e11d48;
+  --cl-color-secondary: #14b8a6;
+  --cl-color-accent: #facc15;
+  --cl-palette-soft: #fff1f2;
+}
