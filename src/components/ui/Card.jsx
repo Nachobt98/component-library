@@ -14,9 +14,12 @@ function Root({
   selected = false,
   disabled = false,
   glow = false,
+  palette,
   className,
   ...props
 }) {
+  void palette
+
   return (
     <Element
       className={cx(
