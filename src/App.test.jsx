@@ -105,15 +105,19 @@ describe('Dashboard app', () => {
     await user.click(screen.getByRole('button', { name: 'View Input Field' }))
 
     await user.click(screen.getByRole('button', { name: 'password' }))
+    await user.click(screen.getByRole('button', { name: 'standard' }))
     await user.click(screen.getByRole('button', { name: 'error' }))
-    await user.click(screen.getByLabelText('Right icon'))
+    await user.click(screen.getByLabelText('Icon'))
+    await user.click(screen.getByRole('button', { name: 'right' }))
 
     const generatedCode = screen.getByText((content, element) => {
       return (
         element?.tagName.toLowerCase() === 'code' &&
         content.includes('type="password"') &&
+        content.includes('variant="standard"') &&
         content.includes('error="Enter a valid email address."') &&
-        content.includes('rightIcon={<Eye />}')
+        content.includes('icon={<Lock />}') &&
+        content.includes('iconPosition="right"')
       )
     })
 
