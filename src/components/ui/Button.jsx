@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { Loader2 } from 'lucide-react'
 import './Button.css'
 
@@ -44,4 +45,20 @@ export function Button({
       {!loading && rightIcon}
     </button>
   )
+}
+
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  fullWidth: PropTypes.bool,
+  glow: PropTypes.bool,
+  leftIcon: PropTypes.node,
+  loading: PropTypes.bool,
+  palette: PropTypes.object,
+  radius: PropTypes.oneOf(['sm', 'md', 'lg', 'full']),
+  rightIcon: PropTypes.node,
+  size: PropTypes.oneOf(['sm', 'md', 'lg', 'xl']),
+  type: PropTypes.oneOf(['button', 'submit', 'reset']),
+  variant: PropTypes.oneOf(['primary', 'secondary', 'outline', 'ghost', 'soft', 'danger', 'link']),
 }
