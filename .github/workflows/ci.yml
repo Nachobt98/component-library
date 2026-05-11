@@ -34,9 +34,11 @@ jobs:
         run: |
           ROLLDOWN_VERSION=$(node -p "require('./node_modules/rolldown/package.json').version")
           LIGHTNINGCSS_VERSION=$(node -p "require('./node_modules/lightningcss/package.json').version")
+          TAILWIND_OXIDE_VERSION=$(node -p "require('./node_modules/@tailwindcss/oxide/package.json').version")
           npm install --no-save --include=optional \
             "@rolldown/binding-linux-x64-gnu@${ROLLDOWN_VERSION}" \
-            "lightningcss-linux-x64-gnu@${LIGHTNINGCSS_VERSION}"
+            "lightningcss-linux-x64-gnu@${LIGHTNINGCSS_VERSION}" \
+            "@tailwindcss/oxide-linux-x64-gnu@${TAILWIND_OXIDE_VERSION}"
 
       - name: Lint
         run: npm run lint
