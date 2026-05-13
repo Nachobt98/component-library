@@ -66,10 +66,10 @@
 .cl-data-table__header-cell {
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 1;
   padding: 0.875rem 1rem;
   border-bottom: 1px solid var(--cl-border-1);
-  background: rgb(15 23 42 / 0.94);
+  background: rgb(15 23 42 / 0.84);
   color: var(--cl-text-3);
   font-size: 0.75rem;
   font-weight: 750;
@@ -85,29 +85,6 @@
 
 .cl-data-table__header-cell--align-right,
 .cl-data-table__cell--align-right { text-align: right; }
-
-.cl-data-table__header-cell--sticky-left,
-.cl-data-table__cell--sticky-left {
-  position: sticky;
-  left: 0;
-  z-index: 3;
-  background: rgb(15 23 42 / 0.96);
-  box-shadow: 1px 0 0 rgb(255 255 255 / 0.08), 18px 0 28px rgb(0 0 0 / 0.18);
-}
-
-.cl-data-table__header-cell--sticky-right,
-.cl-data-table__cell--sticky-right {
-  position: sticky;
-  right: 0;
-  z-index: 3;
-  background: rgb(15 23 42 / 0.96);
-  box-shadow: -1px 0 0 rgb(255 255 255 / 0.08), -18px 0 28px rgb(0 0 0 / 0.18);
-}
-
-.cl-data-table__header-cell--sticky-left,
-.cl-data-table__header-cell--sticky-right {
-  z-index: 4;
-}
 
 .cl-data-table__sort-button {
   display: inline-flex;
@@ -142,22 +119,8 @@
   background: rgb(255 255 255 / 0.055);
 }
 
-.cl-data-table__row:hover .cl-data-table__cell--sticky-left,
-.cl-data-table__row:hover .cl-data-table__cell--sticky-right {
-  background: rgb(22 32 52 / 0.98);
-}
-
-.cl-data-table__row--clickable {
-  cursor: pointer;
-}
-
 .cl-data-table__row--selected {
   background: color-mix(in srgb, var(--cl-color-primary) 10%, transparent);
-}
-
-.cl-data-table__row--selected .cl-data-table__cell--sticky-left,
-.cl-data-table__row--selected .cl-data-table__cell--sticky-right {
-  background: color-mix(in srgb, var(--cl-color-primary) 16%, rgb(15 23 42 / 0.96));
 }
 
 .cl-data-table__cell {
@@ -166,7 +129,6 @@
   color: var(--cl-text-2);
   font-size: 0.875rem;
   vertical-align: middle;
-  background: transparent;
 }
 
 .cl-data-table__cell--compact { padding-block: 0.65rem; }
